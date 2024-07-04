@@ -1,0 +1,79 @@
+﻿@page "/"
+@using Demo_Project.Services
+@inject AccountsService accountSerive
+@inject NavigationManager NavigationManager
+<div class="card">
+    <div class="card-header"></div>
+    <div class="card-body">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Launch demo modal
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <EditForm Model="_Accounts" OnValidSubmit="AddData">
+                            <div class="formgroup">
+                                <label>Account Number</label>
+                                <input type="text" class="form-control" @bind="_Accounts.account_num"/>
+                            </div>
+                            <div class="formgroup">
+                                <label>Name</label>
+                                <input type="text" class="form-control" @bind="_Accounts.name" />
+                            </div>
+                            <div class="formgroup">
+                                <label>Parent_Id</label>
+                                <input type="number" class="form-control" @bind="_Accounts.parent_id"/>
+                            </div>
+                            <div class="formgroup">
+                                <label>Type</label>
+                                <input type="number" class="form-control" @bind="_Accounts.type" />
+                            </div>
+                            <div class="formgroup">
+                                <label>Account_Amount</label>
+                                <input type="number" class="form-control" @bind="_Accounts.ending_balance_amt" />
+                            </div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        </EditForm>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr class="bg-success text-white">
+                    <th>id</th>
+                    <th>account_num</th>
+                    <th>name</th>
+                    <th>parent_id</th>
+                    <th>type</th>
+                    <th>ending_balance_amt</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var a in displayList)
+                {
+                    <tr>
+                        <td>@a.id</td>
+                        <td>@a.account_num</td>
+                        <td>@a.name</td>
+                        <td>@a.parent_id</td>
+                        <td>@a.type</td>
+                        <td>@a.ending_balance_amt</td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>
