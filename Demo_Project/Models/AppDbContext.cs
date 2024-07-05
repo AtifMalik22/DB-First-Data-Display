@@ -8,6 +8,7 @@ namespace Demo_Project.Models
           : base(options)
         {
         }
-        public DbSet<v_Accounts> v_Accounts { get; set; } 
+        public DbSet<v_Accounts> v_Accounts { get; set; }
+        public DbSet<UploadFile> Files { get; set; }
     }
 }

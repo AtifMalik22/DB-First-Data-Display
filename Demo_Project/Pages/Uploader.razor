@@ -1,0 +1,75 @@
+﻿@page "/fileupload"
+@using Demo_Project.Services
+@inject UploadFileService uploadFileService
+@inject IWebHostEnvironment Environment
+
+<InputFile OnChange="HandleFileSelected" accept=".xlsx" />
+@if (fileContent != null && fileContent.Any())
+{
+    <h4>File Content</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>SrNo</th>
+                <th>EmployeeId</th>
+                <th>ServiceCategory</th>
+                <th>EmployeeName</th>
+                <th>Cnic</th>
+                <th>Email</th>
+                <th>JoiningDate</th>
+                <th>MonthDays</th>
+                <th>PresentDays</th>
+                <th>OfferedSalary</th>
+                <th>LeaveDeduction</th>
+                <th>BasicPayAfterDeduction</th>
+                <th>Arrears</th>
+                <th>Allowances</th>
+                <th>AdvancesLoan</th>
+                <th>GrossSalary</th>
+                <th>AdvancesLoanDeduction</th>
+                <th>EOBI</th>
+                <th>WHDeduction</th>
+                <th>WHITDeduction</th>
+                <th>TotalDeductions</th>
+                <th>NetAmount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var line in fileContent)
+            {
+                <tr>
+                    <td>@line.SrNo</td>
+                    <td>@line.EmoployeeId</td>
+                    <td>@line.ServiceCategory</td>
+                    <td>@line.EmployeeName</td>
+                    <td>@line.Cnic</td>
+                    <td>@line.Email</td>
+                    <td>@line.JoiningDate</td>
+                    <td>@line.MonthDays</td>
+                    <td>@line.PresentDays</td>
+                    <td>@line.OfferedSalary</td>
+                    <td>@line.LeaveDeduction</td>
+                    <td>@line.BasicPayafterDeduction</td>
+                    <td>@line.Arrears</td>
+                    <td>@line.Allowances</td>
+                    <td>@line.AdvancesLoan</td>
+                    <td>@line.GrossSalary</td>
+                    <td>@line.AdvancesLoanDeduction</td>
+                    <td>@line.EOBI</td>
+                    <td>@line.WHDeduction</td>
+                    <td>@line.WHITDeduction</td>
+                    <td>@line.TotalDeductions</td>
+                    <td>@line.NetAmount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (fileContent == null)
+{
+    <p>No data loaded. Please upload a file.</p>
+}
+else if (!fileContent.Any())
+{
+    <p>The uploaded file is empty or invalid format.</p>
+}
