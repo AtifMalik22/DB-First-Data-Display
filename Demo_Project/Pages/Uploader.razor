@@ -3,7 +3,15 @@
 @inject UploadFileService uploadFileService
 @inject IWebHostEnvironment Environment
 
+
+<EditForm Model="filess" OnValidSubmit="Add">
+
+    <label for="uploadDate">Upload Date:</label>
+    <InputDate @bind-Value="filess.Date" id="uploadDate" />
+
 <InputFile OnChange="HandleFileSelected" accept=".xlsx" />
+    <button type="submit">Upload</button>
+</EditForm>
 @if (fileContent != null && fileContent.Any())
 {
     <h4>File Content</h4>

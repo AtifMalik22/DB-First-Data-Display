@@ -9,10 +9,15 @@ namespace Demo_Project.Services
         public UploadFileService(AppDbContext context) {
         this._context = context;    
         }
-        public async Task SaveFileContentToDatabase(List<UploadFile> lines)
+        public async Task SaveFileContentToDatabase(List<UploadFile> lines, DateTime uploadDate)
         {
             try
             {
+                foreach (var line in lines)
+                {
+                    line.Date = uploadDate;
+                }
+
                 _context.Files.AddRange(lines);
                 await _context.SaveChangesAsync();
             }

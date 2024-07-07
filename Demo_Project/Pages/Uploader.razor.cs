@@ -1,21 +1,37 @@
 using Demo_Project.Models;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using OfficeOpenXml;
+using Syncfusion.Blazor.Inputs;
 
 namespace Demo_Project.Pages
 {
     public partial class Uploader
     {
+        UploadFile filess = new();
         private List<UploadFile> fileContent=new();
+        SfUploader sfImageUploader { get; set; }
+        private IBrowserFile selectedFile;
         protected override async Task OnInitializedAsync()
         {
             fileContent = await uploadFileService.GetDataAsync();
         }
-        private async Task HandleFileSelected(InputFileChangeEventArgs e)
+        private void HandleFileSelected(InputFileChangeEventArgs e)
         {
-            var file = e.File;
+            selectedFile = e.File;
+        }
 
+        private async Task Add()
+        {
+            if (selectedFile == null)
+            {
+                Console.WriteLine("No file selected.");
+                return;
+            }
+
+            var file = selectedFile;
             if (!file.Name.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
             {
                 Console.WriteLine("Uploaded file is not an Excel file (.xlsx).");
@@ -34,41 +50,10 @@ namespace Demo_Project.Pages
 
             if (fileContent != null && fileContent.Any())
             {
-                await uploadFileService.SaveFileContentToDatabase(fileContent);
-                //StateHasChanged();
+                await uploadFileService.SaveFileContentToDatabase(fileContent, filess.Date);
+                StateHasChanged();
             }
         }
-        //private async Task HandleFileSelected(InputFileChangeEventArgs e)
-        //{
-        //    var file = e.File;
-
-        //    // Check if the file is an Excel file
-        //    if (!file.Name.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
-        //    {
-        //        // Handle incorrect file type
-        //        Console.WriteLine("Uploaded file is not an Excel file (.xlsx).");
-        //        return;
-        //    }
-
-        //    var filePath = Path.Combine(Environment.WebRootPath, "UploadFiles", file.Name);
-
-        //    Directory.CreateDirectory(Path.GetDirectoryName(filePath)); // Ensure directory exists
-
-        //    using (var stream = new FileStream(filePath, FileMode.Create))
-        //    {
-        //        await file.OpenReadStream().CopyToAsync(stream);
-        //    }
-
-        //    fileContent = ReadExcelFile(filePath);
-
-        //    if (fileContent != null && fileContent.Any())
-        //    {
-        //        await uploadFileService.SaveFileContentToDatabase(fileContent);
-        //        // Refresh UI or perform necessary actions to display data in Razor page table
-        //        StateHasChanged(); // Ensures UI updates are triggered
-        //    }
-        //}
-
 
         private List<UploadFile> ReadExcelFile(string filePath)
         {
@@ -77,7 +62,7 @@ namespace Demo_Project.Pages
             // Set the license context for EPPlus
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-            using (var package = new ExcelPackage(new FileInfo(filePath)))
+            using (var package = new ExcelPackage(new System.IO.FileInfo(filePath)))
             {
                 var worksheet = package.Workbook.Worksheets[0]; // Get the first worksheet
 
