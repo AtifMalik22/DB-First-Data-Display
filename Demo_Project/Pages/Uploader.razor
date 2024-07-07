@@ -1,6 +1,7 @@
 ﻿@page "/fileupload"
 @using Demo_Project.Services
 @inject UploadFileService uploadFileService
+@inject EmailService emailService
 @inject IWebHostEnvironment Environment
 
 
@@ -40,6 +41,7 @@
                 <th>WHITDeduction</th>
                 <th>TotalDeductions</th>
                 <th>NetAmount</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -68,6 +70,9 @@
                     <td>@line.WHITDeduction</td>
                     <td>@line.TotalDeductions</td>
                     <td>@line.NetAmount</td>
+                    <td>
+                        <button @onclick="() => SendEmail(line.Email, line)">Send Email</button>
+                    </td>
                 </tr>
             }
         </tbody>
