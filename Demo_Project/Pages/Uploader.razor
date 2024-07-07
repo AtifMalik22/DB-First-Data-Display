@@ -71,7 +71,7 @@
                     <td>@line.TotalDeductions</td>
                     <td>@line.NetAmount</td>
                     <td>
-                        <button @onclick="() => SendEmail(line.Email, line)">Send Email</button>
+                        <button @onclick="() => SendEmailWithPdf(line)">Send Email</button>
                     </td>
                 </tr>
             }

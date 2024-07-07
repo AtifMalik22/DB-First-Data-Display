@@ -1,5 +1,9 @@
 ﻿using System.Net.Mail;
 using System.Net;
+using System.Reflection.Metadata;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
+using Document = iTextSharp.text.Document;
 
 namespace Demo_Project.Services
 {
@@ -12,7 +16,7 @@ namespace Demo_Project.Services
             _configuration = configuration;
         }
 
-        public async Task SendEmailAsync(string toEmail, string subject, string body)
+        public async Task SendEmailWithPdfAsync(string toEmail, string subject, string body, string pdfContent)
         {
             var emailConfig = _configuration.GetSection("EmailCred");
             var smtpClient = new SmtpClient(emailConfig["SmtpHost"])
@@ -32,7 +36,25 @@ namespace Demo_Project.Services
 
             mailMessage.To.Add(toEmail);
 
+            // Generate PDF and attach it
+            var pdfStream = GeneratePdf(pdfContent);
+            mailMessage.Attachments.Add(new Attachment(pdfStream, "PayrollDetails.pdf", "application/pdf"));
+
             await smtpClient.SendMailAsync(mailMessage);
+        }
+
+        private MemoryStream GeneratePdf(string pdfContent)
+        {
+            var document = new Document();
+            var stream = new MemoryStream();
+            PdfWriter.GetInstance(document, stream).CloseStream = false;
+
+            document.Open();
+            document.Add(new Paragraph(pdfContent));
+            document.Close();
+            stream.Position = 0;
+
+            return stream;
         }
     }
 }
