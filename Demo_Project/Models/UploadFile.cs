@@ -27,6 +27,6 @@ namespace Demo_Project.Models
         public int? WHITDeduction { get; set; }
         public int? TotalDeductions { get; set; }
         public int? NetAmount { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } =DateTime.Now;
     }
 }

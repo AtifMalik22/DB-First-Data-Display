@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240705095801_update-null-entities")]
-    partial class updatenullentities
+    [Migration("20240708050519_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,9 @@ namespace DemoProject.Migrations
 
                     b.Property<string>("Cnic")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("EOBI")
                         .HasColumnType("int");
