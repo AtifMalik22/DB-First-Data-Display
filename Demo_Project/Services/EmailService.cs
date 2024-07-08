@@ -1,10 +1,9 @@
-﻿using System.Net.Mail;
-using System.Net;
-using System.Reflection.Metadata;
+﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
-using iTextSharp.text;
-using Document = iTextSharp.text.Document;
-
+using iTextSharp.tool.xml;
+using System.IO;
+using System.Net;
+using System.Net.Mail;
 namespace Demo_Project.Services
 {
     public class EmailService
@@ -43,18 +42,25 @@ namespace Demo_Project.Services
             await smtpClient.SendMailAsync(mailMessage);
         }
 
-        private MemoryStream GeneratePdf(string pdfContent)
+
+        private MemoryStream GeneratePdf(string htmlContent)
         {
-            var document = new Document();
             var stream = new MemoryStream();
-            PdfWriter.GetInstance(document, stream).CloseStream = false;
+            var document = new Document(PageSize.A4, 25, 25, 30, 30);
+            PdfWriter writer = PdfWriter.GetInstance(document, stream);
+            writer.CloseStream = false;
 
             document.Open();
-            document.Add(new Paragraph(pdfContent));
+            using (var stringReader = new StringReader(htmlContent))
+            {
+                XMLWorkerHelper.GetInstance().ParseXHtml(writer, document, stringReader);
+            }
             document.Close();
             stream.Position = 0;
 
             return stream;
         }
+
+
     }
 }

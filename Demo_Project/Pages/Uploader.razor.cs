@@ -120,31 +120,46 @@ namespace Demo_Project.Pages
         private string GeneratePdfContent(UploadFile file)
         {
             return $@"
-            Payroll Details
-            -----------------------
-            SrNo: {file.SrNo}
-            Employee ID: {file.EmoployeeId}
-            Service Category: {file.ServiceCategory}
-            Employee Name: {file.EmployeeName}
-            CNIC: {file.Cnic}
-            Joining Date: {file.JoiningDate}
-            Month Days: {file.MonthDays}
-            Present Days: {file.PresentDays}
-            Offered Salary: {file.OfferedSalary}
-            Leave Deduction: {file.LeaveDeduction}
-            Basic Pay After Deduction: {file.BasicPayafterDeduction}
-            Arrears: {file.Arrears}
-            Allowances: {file.Allowances}
-            Advances Loan: {file.AdvancesLoan}
-            Gross Salary: {file.GrossSalary}
-            Advances Loan Deduction: {file.AdvancesLoanDeduction}
-            EOBI: {file.EOBI}
-            WH Deduction: {file.WHDeduction}
-            WHIT Deduction: {file.WHITDeduction}
-            Total Deductions: {file.TotalDeductions}
-            Net Amount: {file.NetAmount}
-        ";
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ font-family: Arial, sans-serif; }}
+            .table {{ width: 100%; border-collapse: collapse; }}
+            .table th, .table td {{ border: 1px solid black; padding: 8px; text-align: left; }}
+            .table th {{ background-color: #f2f2f2; }}
+        </style>
+    </head>
+    <body>
+        <h2>Payroll Details</h2>
+        <table class='table'>
+            <tr><th>SrNo</th><td>{file.SrNo}</td></tr>
+            <tr><th>Employee ID</th><td>{file.EmoployeeId}</td></tr>
+            <tr><th>Service Category</th><td>{file.ServiceCategory}</td></tr>
+            <tr><th>Employee Name</th><td>{file.EmployeeName}</td></tr>
+            <tr><th>CNIC</th><td>{file.Cnic}</td></tr>
+            <tr><th>Joining Date</th><td>{file.JoiningDate}</td></tr>
+            <tr><th>Month Days</th><td>{file.MonthDays}</td></tr>
+            <tr><th>Present Days</th><td>{file.PresentDays}</td></tr>
+            <tr><th>Offered Salary</th><td>{file.OfferedSalary}</td></tr>
+            <tr><th>Leave Deduction</th><td>{file.LeaveDeduction}</td></tr>
+            <tr><th>Basic Pay After Deduction</th><td>{file.BasicPayafterDeduction}</td></tr>
+            <tr><th>Arrears</th><td>{file.Arrears}</td></tr>
+            <tr><th>Allowances</th><td>{file.Allowances}</td></tr>
+            <tr><th>Advances Loan</th><td>{file.AdvancesLoan}</td></tr>
+            <tr><th>Gross Salary</th><td>{file.GrossSalary}</td></tr>
+            <tr><th>Advances Loan Deduction</th><td>{file.AdvancesLoanDeduction}</td></tr>
+            <tr><th>EOBI</th><td>{file.EOBI}</td></tr>
+            <tr><th>WH Deduction</th><td>{file.WHDeduction}</td></tr>
+            <tr><th>WHIT Deduction</th><td>{file.WHITDeduction}</td></tr>
+            <tr><th>Total Deductions</th><td>{file.TotalDeductions}</td></tr>
+            <tr><th>Net Amount</th><td>{file.NetAmount}</td></tr>
+        </table>
+    </body>
+    </html>";
         }
+
+
 
 
 
