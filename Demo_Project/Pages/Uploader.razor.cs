@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using OfficeOpenXml;
+using Syncfusion.Blazor.Diagrams;
 using Syncfusion.Blazor.Inputs;
 
 namespace Demo_Project.Pages
@@ -11,7 +12,7 @@ namespace Demo_Project.Pages
     public partial class Uploader
     {
         UploadFile filess = new();
-        private List<UploadFile> fileContent=new();
+        private List<UploadFile> fileContent = new();
         SfUploader sfImageUploader { get; set; }
         private IBrowserFile selectedFile;
         protected override async Task OnInitializedAsync()
@@ -120,54 +121,72 @@ namespace Demo_Project.Pages
         private string GeneratePdfContent(UploadFile file)
         {
             return $@"
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        body {{ font-family: Arial, sans-serif; }}
-        .table {{ width: 100%; border-collapse: collapse; }}
-        .table th, .table td {{ border: 1px solid black; padding: 8px; text-align: left; }}
-        .table th {{ background-color: #f2f2f2; }}
-        .header, .footer {{ text-align: center; margin-top: 20px; }}
-        .header p, .footer p {{ margin: 0; }}
-    </style>
-</head>
-<body>
-    <div class='header'>
-        <p>Solochoicez (Pvt) Ltd.</p>
-        <p>Office # 9, 2nd Floor, VIP Plaza, I-8 Markaz, Islamabad, Pakistan.</p>
-        <p>Tel:+ 92 51 8446629</p>
-        <p>Email: info@solochoicez.com</p>
-        <p>Web: www.solochoicez.com</p>
-    </div>
-    <h2 style='text-align: center;'>Salary Slip</h2>
-    <p style='text-align: center;'>For the Month - June 2024</p>
-    <p>Employee ID: {file.EmoployeeId}</p>
-    <p>Employee Name: {file.EmployeeName}</p>
-    <p>Designation : </p>
-    <p>CNIC: {file.Cnic}</p>
-    <table class='table'>
-        <tr><th>Amount (Rs.)</th><th>DEDUCTIONS</th><th>Amount (Rs.)</th></tr>
-        <tr><td>{file.OfferedSalary}</td><td>Advance Payment</td><td>-</td></tr>
-        <tr><td>-</td><td>Leave Deduction</td><td>{file.LeaveDeduction}</td></tr>
-        <tr><td>-</td><td>Income Tax</td><td>{file.WHITDeduction}</td></tr>
-        <tr><td>-</td><td>EOBI</td><td>{file.EOBI}</td></tr>
-        <tr><td>-</td><td>-</td><td>-</td></tr>
-        <tr><td>{file.GrossSalary}</td><td>Total Deductions</td><td>{file.TotalDeductions}</td></tr>
-        <tr><td>{file.NetAmount}</td><td></td><td></td></tr>
-    </table>
-    <div class='footer'>
-        <p>Shehzeela Shafique</p>
-        <p>HR Executive / POC at NITB</p>
-    </div>
-</body>
-</html>";
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body {{ font-family: Arial, sans-serif; }}
+                        .table {{ width: 100%; border-collapse: collapse; }}
+                        .table th, .table {{ border: 1px solid black; padding: 8px; text-align: left; }}
+                        .table td{{padding:8px;}}
+                        .table th, .table .td1 {{ border: 1px solid black; padding: 8px; text-align: left; }}
+                        .table td{{border-right: 1px solid blackl;}}
+                        //.table th {{ background-color: #f2f2f2; }}
+                        .header, .footer {{ text-align: center; margin-top: 20px; }}
+                        .header p, .footer p {{ margin: 0; }}
+                        .header {{display: flex;justify-content: space-between;
+                         align-items: center; /* Optional: Centers items vertically */
+                         padding: 10px;/*background-color: #f0f0f0;*/ /* Optional: Background color */}}
+                        .header {{display: flex;justify-content: space-between;
+                         align-items: center;padding: 10px;/*background-color: #f0f0f0;*/}}
+                        .header > div {{display: flex;justify-content: space-between;}}
+                        .float-left{{text-align:left;}}
+                    </style>
+                </head>
+                <body style='border-left:5px solid orange;'>
+                    <div class='header' style='display: flex; justify-content: space-between; padding: 10px;'>
+                        <div>
+                            <p style='text-align:left'>Logo</p>
+                        </div>
+                        <div style='text-align: right;'>
+                            <p>Solochoicez (Pvt) Ltd.</p>
+                            <p>Office # 9,2nd Floor,<br/>  VIP Plaza, I-8 Markaz,<br/>  Islamabad, Pakistan.</p>
+                            <p>Tel: +92 51 8446629</p>
+                            <p>Email: info@solochoicez.com</p>
+                            <p>Web: www.solochoicez.com</p>
+                        </div>
+                    </div>
+
+                    <h2 style='text-align: center;color:#054B71;'>Salary Slip</h2>
+                    <p style='text-align: center; color:#054B71;'>For the Month - {file.Date.ToString("MMMM yyyy")}</p>
+        <hr/>
+        <div style='display:flex; justify-content:between;'>
+        <div class='d1'><p style='text-align:left'>Employee ID: {file.EmoployeeId}</p></div>
+        <div class='d2'><p style='text-align:righ;'>Employee Name: {file.EmployeeName}</p></div>
+        </div>
+
+        <hr/>
+                    <p>Designation :</p>
+                    <p>CNIC: {file.Cnic}</p>
+                    <table class='table'>
+                        <tr style='background-color:#054B71;color:white;'><th>ADDITIONS</th><th>Amount (Rs.)</th><th>DEDUCTIONS</th><th>Amount (Rs.)</th></tr>
+                        <tr><td>Gross Pay</td><td>{file.GrossSalary}</td><td>Advance Payments</td><td>{file.AdvancesLoanDeduction}</td></tr>
+                        <tr><td>Arrears</td><td>{file.Arrears}</td><td>Leave Deduction</td><td>{file.LeaveDeduction}</td></tr>
+                        <tr><td>Travelling Allowance</td><td>-</td><td>Income Tax</td><td>{file.WHITDeduction}</td></tr>
+                        <tr><td>Medical Allowance</td><td>-</td><td>EOBI</td><td>{file.EOBI}</td></tr>
+                        <tr><td>Equipment Allowance</td><td>-</td><td></td><td>-</td></tr>
+                        <tr><td>Communication Allowance</td><td>-</td><td></td><td>-</td></tr>
+                        <tr><td class='td1'>Total Additions</td><td class='td1'></td><td class='td1'>Total Deductions</td><td class='td1'>{file.TotalDeductions}</td></tr>
+                        <tr><td colspan='3' style='text-align:right;'>Net Pay</td><td>{file.NetAmount}</td></tr>
+                    </table>
+                    <div class='footer float-left'>
+                    <img style='width:20px; height:20px;' src='/wwwroot/time-and-stamp.png' alt='Logo' />
+                        <p><strong>Shehzeela Shafique</strong></p>
+                        <p>HR Executive / POC at NITB</p>
+                    </div>
+                </body>
+                </html>";
         }
-
-
-
-
-
     }
 
 }
