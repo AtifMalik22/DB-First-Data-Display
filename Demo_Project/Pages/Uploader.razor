@@ -27,6 +27,8 @@
             <button class="btn btn-success btn-sm mt-2 float-right" type="submit">Upload</button>
 
         </EditForm>
+        <button @onclick="SendEmailsToAllUsers">Send Emails to All Users</button>
+
         @if (fileContent != null && fileContent.Any())
         {
             <table class="table table-hover table-striped mt-5">

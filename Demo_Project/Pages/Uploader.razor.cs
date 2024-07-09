@@ -117,7 +117,13 @@ namespace Demo_Project.Pages
 
             await emailService.SendEmailWithPdfAsync(file.Email, subject, body, pdfContent);
         }
-
+        private async Task SendEmailsToAllUsers()
+        {
+            foreach (var file in fileContent)
+            {
+                await SendEmailWithPdf(file);
+            }
+        }
         private string GeneratePdfContent(UploadFile file)
         {
             var totalDeduction = file.EOBI + file.WHITDeduction;
