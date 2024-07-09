@@ -120,6 +120,8 @@ namespace Demo_Project.Pages
 
         private string GeneratePdfContent(UploadFile file)
         {
+            var totalDeduction = file.EOBI + file.WHITDeduction;
+
             return $@"
                 <!DOCTYPE html>
                 <html>
@@ -176,7 +178,7 @@ namespace Demo_Project.Pages
                         <tr><td>Medical Allowance</td><td>-</td><td>EOBI</td><td>{file.EOBI}</td></tr>
                         <tr><td>Equipment Allowance</td><td>-</td><td></td><td>-</td></tr>
                         <tr><td>Communication Allowance</td><td>-</td><td></td><td>-</td></tr>
-                        <tr><td class='td1'>Total Additions</td><td class='td1'></td><td class='td1'>Total Deductions</td><td class='td1'>{file.TotalDeductions}</td></tr>
+                        <tr><td class='td1'>Total Additions</td><td class='td1'></td><td class='td1'>Total Deductions</td><td class='td1'>{totalDeduction}</td></tr>
                         <tr><td colspan='3' style='text-align:right;'>Net Pay</td><td>{file.NetAmount}</td></tr>
                     </table>
                     <div class='footer float-left'>
