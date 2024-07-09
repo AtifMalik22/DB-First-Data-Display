@@ -1,6 +1,7 @@
 using Demo_Project.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using OfficeOpenXml;
@@ -15,6 +16,10 @@ namespace Demo_Project.Pages
         private List<UploadFile> fileContent = new();
         SfUploader sfImageUploader { get; set; }
         private IBrowserFile selectedFile;
+        private string emailStatusMessage;
+        private string emailStatusMessage2;
+        [Inject]
+        protected IWebHostEnvironment _webHostEnvironment { get; set; }
         protected override async Task OnInitializedAsync()
         {
             fileContent = await uploadFileService.GetDataAsync();
@@ -116,6 +121,12 @@ namespace Demo_Project.Pages
             string pdfContent = GeneratePdfContent(file);
 
             await emailService.SendEmailWithPdfAsync(file.Email, subject, body, pdfContent);
+            //emailStatusMessage = $"Email sent to {file.EmployeeName} ({file.Email}) successfully.";
+            //StateHasChanged();
+
+            //await Task.Delay(3000); // Wait for 3 seconds
+            //emailStatusMessage = string.Empty;
+            //StateHasChanged();
         }
         private async Task SendEmailsToAllUsers()
         {
@@ -123,17 +134,23 @@ namespace Demo_Project.Pages
             {
                 await SendEmailWithPdf(file);
             }
+            //emailStatusMessage = "Emails sent to all users successfully.";
+            //StateHasChanged();
+
+            //await Task.Delay(3000); // Wait for 3 seconds
+            //emailStatusMessage = string.Empty;
+            //StateHasChanged();
         }
         private string GeneratePdfContent(UploadFile file)
         {
             var totalDeduction = file.EOBI + file.WHITDeduction;
-
             return $@"
                 <!DOCTYPE html>
                 <html>
                 <head>
                     <style>
                         body {{ font-family: Arial, sans-serif; }}
+.justify-content-between {{display: flex;justify-content: space-between;}}
                         .table {{ width: 100%; border-collapse: collapse; }}
                         .table th, .table {{ border: 1px solid black; padding: 8px; text-align: left; }}
                         .table td{{padding:8px;}}
@@ -149,12 +166,15 @@ namespace Demo_Project.Pages
                          align-items: center;padding: 10px;/*background-color: #f0f0f0;*/}}
                         .header > div {{display: flex;justify-content: space-between;}}
                         .float-left{{text-align:left;}}
+                        .float-right{{text-align:right;}}
+                        .h1{{display:inline-block; justify-content:flex;}}
+                        .h2{{align-items:end; float:inline-end;}}
                     </style>
                 </head>
                 <body style='border-left:5px solid orange;'>
                     <div class='header' style='display: flex; justify-content: space-between; padding: 10px;'>
                         <div>
-                            <p style='text-align:left'>Logo</p>
+                    <img src='cid:time-and-stamp' alt='Logo' style='width: 100px;' />
                         </div>
                         <div style='text-align: right;'>
                             <p>Solochoicez (Pvt) Ltd.</p>
@@ -165,19 +185,22 @@ namespace Demo_Project.Pages
                         </div>
                     </div>
 
-                    <h2 style='text-align: center;color:#054B71;'>Salary Slip</h2>
-                    <p style='text-align: center; color:#054B71;'>For the Month - {file.Date.ToString("MMMM yyyy")}</p>
-        <hr/>
-        <div style='display:flex; justify-content:between;'>
-        <div class='d1'><p style='text-align:left'>Employee ID: {file.EmoployeeId}</p></div>
-        <div class='d2'><p style='text-align:righ;'>Employee Name: {file.EmployeeName}</p></div>
-        </div>
+                    <h2 style='text-align: center;color:#0f2a65;'>Salary Slip</h2>
+                    <p style='text-align: center; color:#0f2a65;'>For the Month - {file.Date.ToString("MMMM yyyy")}</p>
+        <hr/>        <div class='justify-content-between'>                                    
+                        <div class='d1'>
+                            <strong>Employee ID:</strong> {file.EmoployeeId}
+                        </div>
+                         <div class='d2'>
+                             <strong>Employee Name:</strong> {file.EmployeeName}
+                         </div>
+                     </div>
 
         <hr/>
                     <p>Designation :</p>
                     <p>CNIC: {file.Cnic}</p>
                     <table class='table'>
-                        <tr style='background-color:#054B71;color:white;'><th>ADDITIONS</th><th>Amount (Rs.)</th><th>DEDUCTIONS</th><th>Amount (Rs.)</th></tr>
+                        <tr style='background-color:#0f2a65;color:white;'><th>ADDITIONS</th><th>Amount (Rs.)</th><th>DEDUCTIONS</th><th>Amount (Rs.)</th></tr>
                         <tr><td>Gross Pay</td><td>{file.GrossSalary}</td><td>Advance Payments</td><td>{file.AdvancesLoanDeduction}</td></tr>
                         <tr><td>Arrears</td><td>{file.Arrears}</td><td>Leave Deduction</td><td>{file.LeaveDeduction}</td></tr>
                         <tr><td>Travelling Allowance</td><td>-</td><td>Income Tax</td><td>{file.WHITDeduction}</td></tr>
@@ -188,7 +211,6 @@ namespace Demo_Project.Pages
                         <tr><td colspan='3' style='text-align:right;'>Net Pay</td><td>{file.NetAmount}</td></tr>
                     </table>
                     <div class='footer float-left'>
-                    <img style='width:20px; height:20px;' src='/wwwroot/time-and-stamp.png' alt='Logo' />
                         <p><strong>Shehzeela Shafique</strong></p>
                         <p>HR Executive / POC at NITB</p>
                     </div>
